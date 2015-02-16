@@ -1,0 +1,101 @@
+create vfsdemo demo.vfs
+VfsCreateCommand executed
+==========================
+close  
+VfsCloseCommand executed
+==========================
+open vfsdemo demo.vfs
+VfsOpenCommand executed
+==========================
+makedir / 
+VfsMakeDirCommand executed
+==========================
+list / 
+VfsListCommand executed
+==========================
+makedir /demo1 
+VfsMakeDirCommand executed
+==========================
+list / 
+/demo1/
+VfsListCommand executed
+==========================
+list /demo1 
+VfsListCommand executed
+==========================
+makedir /demo2 
+VfsMakeDirCommand executed
+==========================
+list / 
+/demo1/
+/demo2/
+VfsListCommand executed
+==========================
+list /demo2 
+VfsListCommand executed
+==========================
+makedir /demo1/demo1.1 
+VfsMakeDirCommand executed
+==========================
+makedir /demo1/demo1.2 
+VfsMakeDirCommand executed
+==========================
+list / 
+/demo1/
+/demo2/
+VfsListCommand executed
+==========================
+list /demo1 
+/demo1/demo1.1/
+/demo1/demo1.2/
+VfsListCommand executed
+==========================
+makedir /demo2/demo2.1 
+VfsMakeDirCommand executed
+==========================
+makedir /demo2/demo2.2 
+VfsMakeDirCommand executed
+==========================
+makedir /demo2/demo2.3 
+VfsMakeDirCommand executed
+==========================
+list / 
+/demo1/
+/demo2/
+VfsListCommand executed
+==========================
+list /demo1 
+/demo1/demo1.1/
+/demo1/demo1.2/
+VfsListCommand executed
+==========================
+list /demo2 
+/demo1/demo2.1/
+/demo1/demo2.2/
+/demo1/demo2.3/
+VfsListCommand executed
+==========================
+close  
+VfsCloseCommand executed
+==========================
+open vfsdemo demo.vfs
+VfsOpenCommand executed
+==========================
+list / 
+/demo1/
+/demo2/
+VfsListCommand executed
+==========================
+list /demo1 
+/demo1/demo1.1/
+/demo1/demo1.2/
+VfsListCommand executed
+==========================
+list /demo2 
+/demo1/demo1.1/
+/demo1/demo1.2/
+VfsListCommand executed
+==========================
+close  
+VfsCloseCommand executed
+==========================
