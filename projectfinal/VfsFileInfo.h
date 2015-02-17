@@ -19,6 +19,7 @@ public:
 	VfsFileInfo();
 	VfsFileInfo(std::string, long, int, std::string);
 	void getHeader(HeaderRecord&);
+	void save(std::string full_path);
 
 };
 

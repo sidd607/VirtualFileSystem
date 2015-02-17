@@ -28,6 +28,7 @@ class VfsFolderInfo: public VfsNodeInfo{
 		void assignChildFolder(VfsFolderInfo*);
 		void assignChildFile(VfsFileInfo*);
 		std::vector<std::string> getChild();
+		
 		//void getName();
 
 };

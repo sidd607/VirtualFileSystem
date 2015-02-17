@@ -123,11 +123,16 @@ void VfsRepository::close(){
 	std::fstream container;
 	container.open(repo_file_path, std::ios::in | std::ios::out | std::ios::binary);
 	
+	if(!container.good()){
+		std::cout << "BAD STREAM" << std::endl;
+	}
+	
 	int temp = vfs_map.size();
 	container.write((char*)&temp, sizeof(int));
 	std::map<std::string, VfsNodeInfo*>::iterator it;
 	HeaderRecord record;
 	std::string path = "", name = "";
+	
 	for(it = vfs_map.begin(); it != vfs_map.end(); it++){
 		it->second->getHeader(record);
 
@@ -216,3 +221,4 @@ void VfsRepository::list(std::string file_path, std::vector<std::string> &conten
 		throw VFS_LISTDIR_01;
 
 }
+

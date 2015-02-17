@@ -12,3 +12,7 @@ void VfsFileInfo::getHeader(HeaderRecord &record){
 	record.offset = file_offset;
 	record.node_type = 0;
 }
+
+void save(std::string full_path){
+	
+}
