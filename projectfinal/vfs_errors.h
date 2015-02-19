@@ -22,10 +22,14 @@ const char *VFS_MAKEDIR_02 = "VFS_MAKEDIR: Folder already exists";
 // list
 const char *VFS_LISTDIR_01 = "VFS_LISTDIR: Folder not found";
 
-// copy
-const char *VFS_COPY_01 = "VFS_COPY: Source file/folder not found";
-const char *VFS_COPY_02 = "VFS_COPY: Target file/folder not found";
-const char *VFS_COPY_03 = "VFS_COPY: Target file already exists";
+// copy-in
+const char *VFS_COPYIN_01 = "VFS_COPYIN: Destination folder not found in VFS";
+const char *VFS_COPYIN_02 = "VFS_COPYIN: Destination file already exists in VFS";
+const char *VFS_COPYIN_03 = "VFS_COPYIN: Error accessing source file in host";
+
+// copy-out
+const char *VFS_COPYOUT_01 = "VFS_COPYOUT: File not found in VFS";
+const char *VFS_COPYOUT_02 = "VFS_COPYOUT: Unable to save file in host";
 
 // cat
 const char *VFS_CAT_01 = "VFS_CAT: File not found";

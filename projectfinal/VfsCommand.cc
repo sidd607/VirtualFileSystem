@@ -4,6 +4,7 @@
 #include<sstream>
 #include "VfsCommand.h"
 #include "VfsRepository.h"
+#include "VfsNodeInfo.h"
 #include "PathString.h"
 
 using namespace std;
@@ -172,7 +173,8 @@ VfsCopyInCommand::VfsCopyInCommand( VfsRepository* repo, string arg1, string arg
 
 int VfsCopyInCommand::doCommand()
 {
-	ostr << "VfsCopyCommand executed" << endl;
+	repo->copyIn(param1, param2);
+	ostr << "VfsCopyInCommand executed" << endl;
 }
 
 string VfsCopyInCommand::usage()
@@ -183,12 +185,13 @@ string VfsCopyInCommand::usage()
 //========================================================================
 
 VfsCopyOutCommand::VfsCopyOutCommand( VfsRepository* repo, string arg1, string arg2, ostream& ostr) :
-	VfsCommand(repo, "copy", arg1, arg2, ostr)
+	VfsCommand(repo, "copyout", arg1, arg2, ostr)
 {
 }
 
 int VfsCopyOutCommand::doCommand()
 {
+	repo->copyOut(param1, param2);
 	ostr << "VfsCopyOutCommand executed" << endl;
 }
 

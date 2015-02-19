@@ -5,11 +5,19 @@
 #include "PathString.h"
 
 #include <iostream>
+#include <cstring>
 
 VfsFolderInfo::VfsFolderInfo(std::string path, std::string name): \
 	VfsNodeInfo(name, path, 1){}
 
 void VfsFolderInfo::getHeader(HeaderRecord &record){
+	
+	std::cout << "function called! \n"; 
+	std::string temp = getName();
+	record.offset = -1;
+	record.size = -1;
+	strcpy(record.folder_path , node_path.c_str());
+	strcpy(record.node_name , temp.c_str());
 	record.node_type = 1;
 }
 
@@ -34,6 +42,10 @@ std::vector<std::string> VfsFolderInfo::getChild(){
 		v.push_back(temp + "/");
 		//std::cout <<  v[i];
 		}
+	for(int i=0; i < child_file.size(); i++){
+		std::string temp = child_file[i]->getName();
+		v.push_back(temp);
+	}
 	return v;
 }
 

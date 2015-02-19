@@ -12,9 +12,13 @@ class VfsFile{
 	char* data_bytes;
 	VfsFileInfo* vfsfile;
 public:
-	VfsFile(char*);
+	VfsFile();
 	void exportfile( std::string external_path);
-	void saveInVfs(std::fstream& repository, int file_offset);
+	void saveInVfs(std::fstream& repository, std::string extn_path, int &file_offset, long &bytes);
+	void exportOut(std::fstream& container,  std::string host_path, int &file_offset, long &file_bytes);
+
+
+
 };
 
 #endif

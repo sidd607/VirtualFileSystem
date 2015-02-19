@@ -50,6 +50,8 @@ public:
 	void list(std::string temp, std::vector<std::string> &contents);
 	void makeDir(std::string, std::string);
 	void vfsMakeDir(std::string, std::string);
+	void copyIn(std::string host_path , std::string repo_path);
+	void copyOut(std::string, std::string);
 };
 
 #endif
