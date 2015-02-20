@@ -10,12 +10,22 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <sys/stat.h>
 
 
 
 
 //VfsRepository::VfsRepository(std::string reponame):repo_name(reponame){
 //}
+bool fileExists(const std::string& filename)
+{
+    struct stat buf;
+    if (stat(filename.c_str(), &buf) != -1)
+    {
+	return true;
+    }
+    return false;
+}
 
 
 VfsRepository::VfsRepository(){
@@ -39,7 +49,7 @@ void VfsRepository::create(std::string name, std::string ext_path)
 		node_count = 0;
 
 		container.write((char*)&node_count, sizeof(int));
-		std::cout << node_count << std::endl;	
+//		std::cout << node_count << std::endl;	
 
 
 		HeaderRecord header;
@@ -56,23 +66,46 @@ void VfsRepository::create(std::string name, std::string ext_path)
 
 void VfsRepository::open(std::string name, std::string ext_path){
 
-	std::fstream container;
-	repo_name = name;
-	repo_file_path = ext_path;
+	if(!fileExists(repo_file_path))
+		throw VFS_OPEN_01;
 
-	container.open(repo_file_path, std::ios::in | std::ios::out | std::ios::binary);
-	container.read((char*)&node_count, sizeof(int));
-	HeaderRecord header;
+	else{
+		std::fstream container;
+		repo_name = name;
+		repo_file_path = ext_path;
+		int x;
+		container.open(repo_file_path, std::ios::in | std::ios::out | std::ios::binary | std::ios::ate);
 
-	for(int i = 0 ;i < node_count; i ++){
-		container.read((char*)&header, sizeof(HeaderRecord));
-		std::cout << i <<" " << header.folder_path << "/" << header.node_name <<"\n";
+		container.seekg(0,std::ios::beg);
+		container.read((char*)&node_count, sizeof(int));
+		HeaderRecord header;
+//	std::cout << "NODES : "<< node_count <<"\n";
+		x = node_count;
+		if(node_count > 0)
+			makeDir("","");
+
+		for(int i = 0 ;i < x - 1; i ++){
+			container.read((char*)&header, sizeof(HeaderRecord));
+	//	std::cout << node_count << " " << i <<" " << header.folder_path << "/" << header.node_name <<"\n";
+			if(header.node_type == 1){
+				makeDir(header.folder_path, header.node_name);
+			}
+			else{
+	//		std::cout << "HELLO";
+
+				VfsFileInfo *file = new VfsFileInfo(header.node_name, header.size, header.offset, header.folder_path);
+				std::map<std::string, VfsNodeInfo*>::iterator it;
+				it = vfs_map.find(header.folder_path);
+				std::string full_path = std::string(header.folder_path) + "/" + std::string(header.node_name);
+	//		dynamic_cast<VfsFolderInfo*>(it->second)->assignChildFile(file);
+			}
 
 
+		}
+
+
+		container.close();
 	}
-
-
-	container.close();
 }
 
 
@@ -80,25 +113,48 @@ void VfsRepository::open(std::string name, std::string ext_path){
 
 void VfsRepository::close(){
 
+	vfs_map.erase("");
+	std::map<std::string , VfsNodeInfo*>::iterator it1;
+	
+	//for(it1 = vfs_map.begin(); it1!=vfs_map.end(); it1++){
+	//	std::cout << it1->first << std::endl;
+	//}
+
 	std::fstream container;
-	container.open(repo_file_path, std::ios::in | std::ios::out | std::ios::binary);
+	container.open(repo_file_path, std::ios::in | std::ios::out | std::ios::binary | std::ios::ate);
 
 	int num_node = vfs_map.size();
+	container.seekp(0, std::ios::beg);
 
 	container.write((char*)&num_node, sizeof(int));
 	HeaderRecord header;
 	std::map<std::string, VfsNodeInfo*>::iterator it;
-	for(it = vfs_map.begin() ; it != vfs_map.end(); it++){
+	
+	it = vfs_map.begin();
+	for( it; it != vfs_map.end(); it++){
 
-		std::cout << "temp: " << it-> first <<std::endl;
 		if(it->first != "/"){
-			it->second -> getHeader(header);
-			container.write((char*)&header, sizeof(HeaderRecord));
+			
+				it->second -> getHeader(header, it->first);
+
+	//			std::cout << "i" <<" " << header.folder_path << "/" << header.node_name <<"\n";
+				container.write((char*)&header, sizeof(HeaderRecord));
+			
+			
+/*
+				VfsFileInfo *file = new VfsFileInfo(header.node_name, header.size, header.offset, header.folder_path);
+				std::map<std::string, VfsNodeInfo*>::iterator it;
+				it = vfs_map.find(header.folder_path);
+				std::string full_path = std::string(header.folder_path) + "/" + std::string(header.node_name);
+				//
+				dynamic_cast<VfsFolderInfo*>(it->second)->assignChildFile(file);
+*/			
 		}
 	}	
 
 	container.clear();
 	container.close();
+	//_map.clear();
 	
 }
 
@@ -124,14 +180,14 @@ void VfsRepository::makeDir(std::string path, std::string name){
 			dynamic_cast<VfsFolderInfo*>(it->second)->assignChildFolder(folder);
 			vfs_map[full_path] = folder;
 		//std::cout << "directory created! "<< std::endl;
-			std::cout << "CASE 1 " <<  full_path << std::endl;
+			//std::cout << "CASE 1 " <<  full_path << std::endl;
 		}
 
 		else if(path == "" && name == ""){
 		//std::cout << "CASE II";
 			VfsFolderInfo *folder = new VfsFolderInfo(name, "");
 			vfs_map[""] = folder;
-			std::cout << "CASE 2 " << vfs_map[""]->getName() << std::endl;
+			//std::cout << "CASE 2 " << vfs_map[""]->getName() << std::endl;
 		}
 
 		else if(path == "" && name != ""){
@@ -142,17 +198,25 @@ void VfsRepository::makeDir(std::string path, std::string name){
 			vfs_map["/" + name] = child;
 			root->assignChildFolder(child);
 			child->assignParent(root);
-			std::cout << "CASE 3 " << vfs_map["/"+name]->getName() << std::endl;
+	//		std::cout << "CASE 3 " << vfs_map["/"+name]->getName() << std::endl;
 		}
 		else 
 			throw VFS_MAKEDIR_01;
 	}	
 }
 
+
+
+
+
+
+
 void VfsRepository::list(std::string file_path, std::vector<std::string> &contents){
 
+	
 	if(file_path == "/")
 		file_path = "";
+
 	std::map<std::string, VfsNodeInfo*>::iterator it;
 	it = vfs_map.find(file_path);
 	if(it != vfs_map.end()){
@@ -170,19 +234,6 @@ void VfsRepository::list(std::string file_path, std::vector<std::string> &conten
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 void VfsRepository::copyIn(std::string host_path, std::string repo_path){
 
 	PathString p(repo_path, "/");
@@ -194,16 +245,23 @@ void VfsRepository::copyIn(std::string host_path, std::string repo_path){
 		std::cout << "HELLO";	
 	}
 	else
-		std::cout << "PATH NOT FOUND";
+	std::cout << "PATH NOT FOUND";
 
 	std::map<std::string, VfsNodeInfo*>::iterator it;
+	
 	it = vfs_map.find(path);
 	if(it != vfs_map.end()){
 		VfsFileInfo *file = new VfsFileInfo(name, 0, 0, path);
 		file->save(host_path, repo_file_path);
-		vfs_map[repo_path] = file;
+		if(!vfs_map[repo_path])
+			vfs_map[repo_path] = file;
+		else
+			throw VFS_COPYIN_02;
+
 		dynamic_cast<VfsFolderInfo*>(it->second)->assignChildFile(file);
 	}
+	else
+		throw VFS_COPYIN_01;
 
 
 }
@@ -218,7 +276,8 @@ void VfsRepository::copyOut(std::string repo_path, std::string host_path){
 		dynamic_cast<VfsFileInfo*>(vfs_map[repo_path]) -> dexport(repo_file_path, host_path);
 	}
 	else{
-		std::cout << "404 FILE NOT FOUND" << std::endl;
+		
+		throw VFS_COPYOUT_01;
 	}
 
 }

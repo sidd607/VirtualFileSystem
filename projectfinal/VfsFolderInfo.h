@@ -23,7 +23,7 @@ class VfsFolderInfo: public VfsNodeInfo{
 	public:
 		
 		VfsFolderInfo(std::string node_path, std::string node_name);
-		void getHeader(HeaderRecord&);
+		void getHeader(HeaderRecord&, std::string);
 		void assignParent(VfsFolderInfo*);
 		void assignChildFolder(VfsFolderInfo*);
 		void assignChildFile(VfsFileInfo*);

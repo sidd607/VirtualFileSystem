@@ -7,28 +7,28 @@
 const char *VFS_GEN_01 = "VFS_ERROR: Repository not open";
 
 // create
-const char *VFS_CREATE_01 = "VFS_CREATE: Unable to create host repository";
+const char *VFS_CREATE_01 = "VFS_CREATE: Unable to create host repository";//done
 
 // open
-const char *VFS_OPEN_01 = "VFS_OPEN: Unable to open host repository";
+const char *VFS_OPEN_01 = "VFS_OPEN: Unable to open host repository";//done
 
 // close
-const char *VFS_CLOSE_01 = "VFS_CLOSE: Error during close of host repository";
+const char *VFS_CLOSE_01 = "VFS_CLOSE: Error during close of host repository";//dont know
 
 // makedir
-const char *VFS_MAKEDIR_01 = "VFS_MAKEDIR: Parent folder not found";
-const char *VFS_MAKEDIR_02 = "VFS_MAKEDIR: Folder already exists";
+const char *VFS_MAKEDIR_01 = "VFS_MAKEDIR: Parent folder not found";//done 
+const char *VFS_MAKEDIR_02 = "VFS_MAKEDIR: Folder already exists";//done 
 
 // list
-const char *VFS_LISTDIR_01 = "VFS_LISTDIR: Folder not found";
+const char *VFS_LISTDIR_01 = "VFS_LISTDIR: Folder not found";//DONe
 
 // copy-in
-const char *VFS_COPYIN_01 = "VFS_COPYIN: Destination folder not found in VFS";
-const char *VFS_COPYIN_02 = "VFS_COPYIN: Destination file already exists in VFS";
+const char *VFS_COPYIN_01 = "VFS_COPYIN: Destination folder not found in VFS";//done
+const char *VFS_COPYIN_02 = "VFS_COPYIN: Destination file already exists in VFS";//done
 const char *VFS_COPYIN_03 = "VFS_COPYIN: Error accessing source file in host";
 
 // copy-out
-const char *VFS_COPYOUT_01 = "VFS_COPYOUT: File not found in VFS";
+const char *VFS_COPYOUT_01 = "VFS_COPYOUT: File not found in VFS";//done
 const char *VFS_COPYOUT_02 = "VFS_COPYOUT: Unable to save file in host";
 
 // cat

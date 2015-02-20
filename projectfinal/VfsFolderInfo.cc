@@ -10,15 +10,20 @@
 VfsFolderInfo::VfsFolderInfo(std::string path, std::string name): \
 	VfsNodeInfo(name, path, 1){}
 
-void VfsFolderInfo::getHeader(HeaderRecord &record){
+void VfsFolderInfo::getHeader(HeaderRecord &record, std::string full_name){
 	
-	std::cout << "function called! \n"; 
+	PathString p(full_name, "/");
+
+
+	
+	
 	std::string temp = getName();
 	record.offset = -1;
 	record.size = -1;
-	strcpy(record.folder_path , node_path.c_str());
-	strcpy(record.node_name , temp.c_str());
+	strcpy(record.folder_path , p.excludeLast().c_str());
+	strcpy(record.node_name , p.getLast().c_str());
 	record.node_type = 1;
+	
 }
 
 void VfsFolderInfo::assignParent(VfsFolderInfo *parent){

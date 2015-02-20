@@ -22,22 +22,23 @@ void VfsFile::saveInVfs(std::fstream& repository, std::string extn_path,int &fil
 
 	std::fstream host;
 	host.open(extn_path, std::ios::in | std::ios::out | std::ios::binary);
-	std::cout << "FILE OPENED" << std::endl;
+	//std::cout << "FILE OPENED" << std::endl;
 	repository.seekp(0,std::ios::end);
 	file_offset = repository.tellp();
+	//std::cout << file_offset << "\n";
 	int ext;
 	int count = 0;
 	char * buffer = new char[1024];
 	while(!host.eof()){
 		host.read(buffer, 1024);
 		ext = host.gcount();
-		std::cout << host<<"\t" << ext << "\n";
+	//	std::cout << host<<"\t" << ext << "\n";
 		if(ext == 1024){
 			repository.write(buffer, 1024);
 			count += 1024;
 		}
 		else{
-			std::cout << buffer << "\t" <<ext << "\n";
+	//		std::cout << buffer << "\t" <<ext << "\n";
 			repository.write(buffer,ext);
 			count += ext;
 			bytes = count;
@@ -58,15 +59,22 @@ void VfsFile::exportOut(std::fstream &container, std::string host_path, int& off
 	out.clear();
 	container.clear();
 	container.seekg(offset, std::ios::beg);
+	//std::cout << offset <<"\n";
 	int count = bytes/1024;
+	int left = bytes % 1024;
+
+	//std::cout << host_path <<"\t" <<  count <<"\t" << left << "\n";
+
+
 	for(int i = 0; i< count ; i++){
 
 		container.read(buffer, 1024);
-		std::cout << buffer;
-		out.read(buffer, 1024);
+		//std::cout << buffer;
+		out.write(buffer, 1024);
 	}
-	int left = bytes % count;
+	
 	container.read(buffer, left);
+	//std::cout << buffer;
 	out.write(buffer,left);
 
 }

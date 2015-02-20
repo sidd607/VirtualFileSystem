@@ -1,6 +1,9 @@
 #include "VfsFileInfo.h"
+#include "PathString.h"
 #include "VfsFile.h"
 #include "VfsFolderInfo.h"
+
+#include <cstring>
 #include <fstream>
 
 
@@ -8,7 +11,15 @@ VfsFileInfo::VfsFileInfo(std::string nodename, long bytes, int offset, std::stri
 file_bytes(bytes), file_offset(offset), VfsNodeInfo(nodename, filepath, 0)
 {}
 
-void VfsFileInfo::getHeader(HeaderRecord &record){
+void VfsFileInfo::getHeader(HeaderRecord &record, std::string temp){
+
+	
+	
+	
+	PathString p(temp, "/");
+
+	strcpy(record.folder_path , p.excludeLast().c_str());
+	strcpy(record.node_name , p.getLast().c_str());
 	record.size = file_bytes;
 	record.offset = file_offset;
 	record.node_type = 0;

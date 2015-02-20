@@ -17,7 +17,7 @@ class VfsNodeInfo{
 public:
 	VfsNodeInfo();
 	VfsNodeInfo(std::string, std::string, int);
-	virtual void getHeader(HeaderRecord&) = 0;
+	virtual void getHeader(HeaderRecord&, std::string) = 0;
 	std::string getPath();
 	std::string getName();
 	

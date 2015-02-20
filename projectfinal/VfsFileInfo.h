@@ -20,7 +20,7 @@ public:
 
 	VfsFileInfo();
 	VfsFileInfo(std::string, long, int, std::string);
-	void getHeader(HeaderRecord&);
+	void getHeader(HeaderRecord& hr, std::string temp);
 	void save(std::string, std::string);	
 	//open rep(container)
 	//get pointer to end
